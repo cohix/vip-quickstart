@@ -40,7 +40,21 @@ wp::site { '/srv/www/wp':
 # Install GitHub Plugins
 $github_plugin_keys = keys( $github_plugins )
 gitplugin { $github_plugin_keys:
-    git_urls => $github_plugins
+    git_urls   => $github_plugins,
+}
+
+repomonitor_repo { '/srv/www/wp-content/plugins/vip-scanner':
+  repo_name => 'VIP Scanner',
+  require   => Gitplugin[$github_plugin_keys]
+}
+
+repomonitor_repo { '/srv/www/wp-content/plugins/jetpack':
+  repo_name => 'Jetpack',
+  require   => Gitplugin[$github_plugin_keys]
+}
+
+repomonitor_repo { '/srv':
+  repo_name => 'Quickstart'
 }
 
 # Install plugins
@@ -116,6 +130,11 @@ vcsrepo { '/srv/www/wp-content/themes/pub/twentyfourteen':
   ensure   => latest,
   source   => 'https://wpcom-themes.svn.automattic.com/twentyfourteen',
   provider => svn,
+}
+
+repomonitor_repo { '/srv/www/wp-content/themes/pub':
+  repo_name => 'Public Themes',
+  require   => Vcsrepo['/srv/www/wp-content/themes/pub']
 }
 
 vcsrepo { '/srv/www/wp-tests':
