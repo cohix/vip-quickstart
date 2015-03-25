@@ -120,7 +120,7 @@ function options_sync_package_downloader() {
 		var current_state = -1;
 		var status_action_interval = false;
 		var request_package_interval = 15000;
-		var states = [ 'request-package', 'download-package', 'generate-preview' ];
+		var states = [ 'request-package', 'download-package', 'download-status', 'generate-preview' ];
 		next_state();
 
 		function update_status_row() {
@@ -160,6 +160,15 @@ function options_sync_package_downloader() {
 					break;
 
 				case 2:
+					if ( !status_action_interval ) {
+						status_action_interval = setInterval( do_status_actions, request_package_interval );
+					}
+					
+					// Check the download status
+					request.complete( parse_download_status_response );
+					break;
+
+				case 3:
 					// Get the next url
 					request.complete( parse_package_generate_preview_response );
 					break;
@@ -209,6 +218,8 @@ function options_sync_package_downloader() {
 
 		function next_state() {
 			++current_state;
+
+			console.log("State change: " + (current_state - 1) + " to " + current_state);
 
 			if ( status_action_interval ) {
 				clearInterval( status_action_interval );
