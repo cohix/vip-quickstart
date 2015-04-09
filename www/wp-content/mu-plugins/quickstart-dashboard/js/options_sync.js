@@ -177,7 +177,6 @@ function options_sync_package_downloader() {
 		}
 
 		function parse_package_generation_status_response( full_response ) {
-			console.log( full_response );
 			var response = full_response.responseJSON;
 
 			if ( ! response.success ) {
@@ -194,7 +193,6 @@ function options_sync_package_downloader() {
 		}
 
 		function parse_package_download_response( full_response ) {
-			console.log( full_response );
 			var response = full_response.responseJSON;
 
 			if ( ! response.success ) {
@@ -206,7 +204,6 @@ function options_sync_package_downloader() {
 		}
 
 		function parse_package_generate_preview_response( full_response ) {
-			console.log( full_response );
 			var response = full_response.responseJSON;
 			if ( ! response.success || typeof response.data.preview_url === 'undefined' ) {
 				handle_failure();
@@ -218,8 +215,6 @@ function options_sync_package_downloader() {
 
 		function next_state() {
 			++current_state;
-
-			console.log("State change: " + (current_state - 1) + " to " + current_state);
 
 			if ( status_action_interval ) {
 				clearInterval( status_action_interval );
